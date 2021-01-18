@@ -5,13 +5,13 @@ library(tidyverse)
 setwd("~/cw/data-science/04_Exploratory_Data_Analysis/04_two_case_studies_in_EDA/ExploratoryDataAnalysis_assignment")
 NEI <- readRDS("summarySCC_PM25.rds")
 SCC <- readRDS("Source_Classification_Code.rds")
-# [1] "POINT"    "NONPOINT" "ON-ROAD"  "NON-ROAD"
 
-y <- SCC %>% select("SCC", "EI.Sector")
-cities <- NEI %>% filter(fips == "24510" | fips == "06037")
-z <- merge(cities, y, by.x="SCC")
-x1 <- grepl("vehicle", z[,"EI.Sector"], ignore.case=T)
-df <- z[x1,] %>%
+bolLa <- NEI %>% filter(fips == "24510" | fips == "06037")
+x1 <- grepl("vehicle", SCC$EI.Sector,ignore.case=T)
+sccs1 <- SCC[x1,"SCC"]
+
+bolLaVehicle <- bolLa %>% filter(SCC %in% sccs1)
+df <- bolLaVehicle %>%
     group_by(fips, year) %>%
     summarize(pm25=sum(Emissions)) %>%
     arrange(fips,year)

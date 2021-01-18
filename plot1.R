@@ -4,7 +4,8 @@ setwd("~/cw/data-science/04_Exploratory_Data_Analysis/04_two_case_studies_in_EDA
 NEI <- readRDS("summarySCC_PM25.rds")
 SCC <- readRDS("Source_Classification_Code.rds")
 
-tot <- with(NEI, tapply(Emissions, year, sum))
+#tot <- with(NEI, tapply(Emissions, year, sum))
+tot <- aggregate(NEI$Emissions, by=list(year=NEI$year), sum)
 r <- range(tot)
 barplot(tot, ylim=c(0,r[2]), main = "US Total Emission", xlab = "Year", ylab = "PM2.5 Emission(tons)")
 
